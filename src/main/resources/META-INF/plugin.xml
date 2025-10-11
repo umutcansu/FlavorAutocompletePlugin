@@ -1,0 +1,52 @@
+<idea-plugin>
+    <id>io.github.umutcansu.FlavorAutocompletePlugin</id>
+
+    <name>Android Flavor Autocomplete</name>
+
+    <vendor url="https://github.com/umutcansu">Umut Cansu</vendor>
+
+    <idea-version since-build="241" />
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.intellij.groovy</depends>
+    <depends>org.jetbrains.kotlin</depends>
+    <depends>org.jetbrains.plugins.gradle</depends>
+    <depends>org.jetbrains.android</depends>
+
+    <description><![CDATA[
+        <h1>Android Flavor Autocomplete</h1>
+        <p>Tired of mistyping product flavor names or switching to your build.gradle file just to remember them? This plugin is for you!</p>
+        <p><b>Android Flavor Autocomplete</b> scans all modules in your project, finds every product flavor you've defined, and provides instant autocompletion suggestions within string literals.</p>
+
+        <h2>Key Features:</h2>
+        <ul>
+            <li><b>Project-Wide Scanning:</b> Finds flavors from all Android modules, not just the one you're currently working in.</li>
+            <li><b>Smart Suggestions:</b> Autocompletion works seamlessly inside string literals in both Kotlin (<code>.kt</code>) and Groovy (<code>.gradle</code>, <code>.gradle.kts</code>) files.</li>
+            <li><b>Time-Saving:</b> Speeds up writing build scripts, tests, and application code that references product flavors.</li>
+            <li><b>Error Prevention:</b> Avoids typos and runtime errors caused by incorrect flavor names.</li>
+        </ul>
+        <p>
+            Simply start typing a flavor name inside a string, and the plugin will offer a list of all available flavors in your project. It's a simple but powerful tool for any developer working on a multi-flavor Android application.
+        </p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <ul>
+            <li>Initial version of the plugin.</li>
+            <li>Provides autocompletion for all product flavors across all modules.</li>
+            <li>Supports both Kotlin and Groovy files.</li>
+        </ul>
+    ]]></change-notes>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <completion.contributor
+                language="Groovy"
+                order="first"
+                implementationClass="io.github.umutcansu.flavorautocompleteplugin.FlavorCompletionContributor"/>
+
+        <completion.contributor
+                language="kotlin"
+                order="first"
+                implementationClass="io.github.umutcansu.flavorautocompleteplugin.FlavorCompletionContributor"/>
+    </extensions>
+</idea-plugin>
