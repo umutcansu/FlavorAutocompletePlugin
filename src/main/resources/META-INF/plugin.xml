@@ -5,7 +5,7 @@
 
     <vendor url="https://github.com/umutcansu">Umut Cansu</vendor>
 
-    <idea-version since-build="242" />
+    <idea-version since-build="241" />
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.intellij.groovy</depends>
