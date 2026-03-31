@@ -2,12 +2,12 @@
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.1.0" // Consider using a version consistent with your IDE target
+    id("org.jetbrains.kotlin.jvm") version "2.1.0"
     id("org.jetbrains.intellij.platform") version "2.7.1"
 }
 
 group = "io.github.umutcansu.flavorautocomplete"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
@@ -18,32 +18,31 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        androidStudio("2024.1.2.1")
+        androidStudio("2024.2.1.3")
         testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
 
         bundledPlugin("org.intellij.groovy")
         bundledPlugin("org.jetbrains.kotlin")
         bundledPlugin("org.jetbrains.android")
-        bundledPlugin("org.jetbrains.plugins.gradle") // Fixed the typo with a leading space
+        bundledPlugin("org.jetbrains.plugins.gradle")
     }
 }
 
-// Configuration for the plugin. This will be patched into plugin.xml at build time.
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "241"
-            // untilBuild is automatically set to "241.*"
+            sinceBuild = "242"
         }
 
-        // Richer change notes for the Marketplace.
         changeNotes = """
             <ul>
-                <li>Initial version of the plugin.</li>
-                <li>Provides autocompletion for all product flavors across all modules.</li>
-                <li>Supports both Kotlin and Groovy files.</li>
+                <li>Fixed binary compatibility with Android Studio Narwhal and newer.</li>
+                <li>Removed upper version bound for broader IDE compatibility.</li>
             </ul>
         """.trimIndent()
+    }
+    publishing {
+        token.set(providers.gradleProperty("ORG_JETBRAINS_INTELLIJ_PLATFORM_PUBLISH_TOKEN"))
     }
 }
 
