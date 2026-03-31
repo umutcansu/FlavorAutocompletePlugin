@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        androidStudio("2024.2.1.3")
+        androidStudio("2024.1.2.1")
         testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
 
         bundledPlugin("org.intellij.groovy")
@@ -31,7 +31,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "242"
+            sinceBuild = "241"
         }
 
         changeNotes = """
