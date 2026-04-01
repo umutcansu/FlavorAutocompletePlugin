@@ -11,7 +11,7 @@
     <depends>org.intellij.groovy</depends>
     <depends>org.jetbrains.kotlin</depends>
     <depends>org.jetbrains.plugins.gradle</depends>
-    <depends>org.jetbrains.android</depends>
+    <depends optional="true">org.jetbrains.android</depends>
 
     <description><![CDATA[
         <h1>Android Flavor Autocomplete</h1>
