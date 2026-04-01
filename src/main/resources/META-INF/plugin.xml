@@ -11,7 +11,6 @@
     <depends>org.intellij.groovy</depends>
     <depends>org.jetbrains.kotlin</depends>
     <depends>org.jetbrains.plugins.gradle</depends>
-    <depends optional="true">org.jetbrains.android</depends>
 
     <description><![CDATA[
         <h1>Android Flavor Autocomplete</h1>
@@ -21,19 +20,17 @@
         <h2>Key Features:</h2>
         <ul>
             <li><b>Project-Wide Scanning:</b> Finds flavors from all Android modules, not just the one you are currently working in.</li>
-            <li><b>Smart Suggestions:</b> Autocompletion works seamlessly inside string literals in both Kotlin (<code>.kt</code>) and Groovy (<code>.gradle</code>, <code>.gradle.kts</code>) files.</li>
+            <li><b>Smart Suggestions:</b> Autocompletion works seamlessly inside string literals in both Kotlin and Groovy files.</li>
             <li><b>Time-Saving:</b> Speeds up writing build scripts, tests, and application code that references product flavors.</li>
             <li><b>Error Prevention:</b> Avoids typos and runtime errors caused by incorrect flavor names.</li>
         </ul>
-        <p>
-            Simply start typing a flavor name inside a string, and the plugin will offer a list of all available flavors in your project. It is a simple but powerful tool for any developer working on a multi-flavor Android application.
-        </p>
     ]]></description>
 
     <change-notes><![CDATA[
         <ul>
             <li>Fixed binary compatibility with Android Studio Narwhal and newer.</li>
             <li>Removed upper version bound for broader IDE compatibility.</li>
+            <li>Added K2 Kotlin compatibility mode support.</li>
         </ul>
     ]]></change-notes>
 
@@ -47,5 +44,9 @@
                 language="kotlin"
                 order="first"
                 implementationClass="io.github.umutcansu.flavorautocompleteplugin.FlavorCompletionContributor"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true" />
     </extensions>
 </idea-plugin>
