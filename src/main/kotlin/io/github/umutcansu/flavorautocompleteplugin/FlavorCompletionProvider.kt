@@ -1,10 +1,10 @@
 package io.github.umutcansu.flavorautocompleteplugin
 
-import com.android.tools.idea.gradle.project.model.GradleAndroidModel
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.psi.util.CachedValueProvider
@@ -45,7 +45,6 @@ class FlavorCompletionProvider : CompletionProvider<CompletionParameters>() {
         if (stringLiteral != null) {
             LOG.warn("InsertHandler: Inside a string literal. Using REPLACE behavior.")
             val textRange = stringLiteral.textRange
-            // Add quotes to the replacement string.
             val newText = "\"${item.lookupString}\""
             context.document.replaceString(textRange.startOffset, textRange.endOffset, newText)
             context.editor.caretModel.moveToOffset(textRange.startOffset + newText.length)
@@ -73,7 +72,7 @@ class FlavorCompletionProvider : CompletionProvider<CompletionParameters>() {
 
             flavors.forEach { flavorName ->
                 val lookupElement = LookupElementBuilder.create(flavorName)
-                    .withInsertHandler(smartInsertHandler) // Attach our smart handler.
+                    .withInsertHandler(smartInsertHandler)
                 customResultSet.addElement(lookupElement)
             }
         } else {
@@ -91,16 +90,37 @@ class FlavorCompletionProvider : CompletionProvider<CompletionParameters>() {
             val allFlavors = mutableSetOf<String>()
 
             for (module in allModules) {
-                val androidModel = GradleAndroidModel.get(module)
-                if (androidModel != null) {
-                    LOG.warn("Found Android module '${module.name}', flavors: ${androidModel.productFlavorNames.joinToString()}")
-                    allFlavors.addAll(androidModel.productFlavorNames)
+                try {
+                    val flavors = getProductFlavorNamesViaReflection(module)
+                    if (flavors.isNotEmpty()) {
+                        LOG.warn("Found Android module '${module.name}', flavors: ${flavors.joinToString()}")
+                        allFlavors.addAll(flavors)
+                    }
+                } catch (e: Throwable) {
+                    LOG.warn("Could not get flavors for module '${module.name}': ${e.message}")
                 }
             }
             CachedValueProvider.Result.create(
                 allFlavors,
                 ProjectRootManager.getInstance(project)
             )
+        }
+    }
+
+    private fun getProductFlavorNamesViaReflection(module: Module): Collection<String> {
+        return try {
+            val modelClass = Class.forName("com.android.tools.idea.gradle.project.model.GradleAndroidModel")
+            val getMethod = modelClass.getMethod("get", Module::class.java)
+            val model = getMethod.invoke(null, module) ?: return emptyList()
+            val flavorsMethod = model.javaClass.getMethod("getProductFlavorNames")
+            @Suppress("UNCHECKED_CAST")
+            (flavorsMethod.invoke(model) as? Collection<String>) ?: emptyList()
+        } catch (e: ClassNotFoundException) {
+            emptyList()
+        } catch (e: NoSuchMethodException) {
+            emptyList()
+        } catch (e: Throwable) {
+            emptyList()
         }
     }
 }
