@@ -23,10 +23,47 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.path.GrM
 
 class CustomPrefixMatcher(prefix: String) : PrefixMatcher(prefix) {
     override fun prefixMatches(name: String): Boolean {
-        return name.startsWith(prefix, ignoreCase = true)
+        if (prefix.isEmpty()) return true
+        // 1. startsWith (original behavior)
+        if (name.startsWith(prefix, ignoreCase = true)) return true
+        // 2. contains (e.g. "test" matches "mastercardTestMPOC")
+        if (name.contains(prefix, ignoreCase = true)) return true
+        // 3. camelCase hump matching (e.g. "mTM" matches "mastercardTestMPOC")
+        return camelHumpMatch(name, prefix)
     }
 
     override fun cloneWithPrefix(newPrefix: String): PrefixMatcher = CustomPrefixMatcher(newPrefix)
+
+    private fun camelHumpMatch(name: String, pattern: String): Boolean {
+        val humps = buildList {
+            val current = StringBuilder()
+            for (ch in name) {
+                if (ch.isUpperCase() && current.isNotEmpty()) {
+                    add(current.toString())
+                    current.clear()
+                }
+                current.append(ch)
+            }
+            if (current.isNotEmpty()) add(current.toString())
+        }
+
+        var patternIndex = 0
+        for (hump in humps) {
+            if (patternIndex >= pattern.length) break
+            if (hump.startsWith(pattern[patternIndex], ignoreCase = true)) {
+                patternIndex++
+                // Match remaining pattern chars within this hump
+                var humpIndex = 1
+                while (patternIndex < pattern.length && humpIndex < hump.length) {
+                    if (hump[humpIndex].equals(pattern[patternIndex], ignoreCase = true)) {
+                        patternIndex++
+                    }
+                    humpIndex++
+                }
+            }
+        }
+        return patternIndex == pattern.length
+    }
 }
 
 
