@@ -3,6 +3,7 @@ package io.github.umutcansu.flavorautocompleteplugin
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
@@ -153,14 +154,14 @@ class FlavorCompletionProvider : CompletionProvider<CompletionParameters>() {
         for (root in ModuleRootManager.getInstance(module).contentRoots) {
             root.findChild("build.gradle")?.let { vf ->
                 try {
-                    flavors.addAll(parseGroovyBuildFile(module, vf))
-                    flavors.addAll(parseAppliedScripts(module, vf, root))
+                    flavors.addAll(ApplicationManager.getApplication().runReadAction<Set<String>, Throwable> { parseGroovyBuildFile(module, vf) })
+                    flavors.addAll(ApplicationManager.getApplication().runReadAction<Set<String>, Throwable> { parseAppliedScripts(module, vf, root) })
                 } catch (_: Throwable) { }
             }
 
             root.findChild("build.gradle.kts")?.let { vf ->
                 try {
-                    flavors.addAll(parseKotlinBuildFile(module, vf))
+                    flavors.addAll(ApplicationManager.getApplication().runReadAction<Set<String>, Throwable> { parseKotlinBuildFile(module, vf) })
                 } catch (_: Throwable) { }
             }
         }
