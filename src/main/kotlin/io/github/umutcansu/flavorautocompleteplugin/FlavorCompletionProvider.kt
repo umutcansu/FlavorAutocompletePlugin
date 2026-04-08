@@ -3,7 +3,7 @@ package io.github.umutcansu.flavorautocompleteplugin
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.openapi.application.ReadAction
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
@@ -154,14 +154,14 @@ class FlavorCompletionProvider : CompletionProvider<CompletionParameters>() {
         for (root in ModuleRootManager.getInstance(module).contentRoots) {
             root.findChild("build.gradle")?.let { vf ->
                 try {
-                    flavors.addAll(ReadAction.compute<Set<String>, Throwable> { parseGroovyBuildFile(module, vf) })
-                    flavors.addAll(ReadAction.compute<Set<String>, Throwable> { parseAppliedScripts(module, vf, root) })
+                    flavors.addAll(runReadAction<Set<String>> { parseGroovyBuildFile(module, vf) })
+                    flavors.addAll(runReadAction<Set<String>> { parseAppliedScripts(module, vf, root) })
                 } catch (_: Throwable) { }
             }
 
             root.findChild("build.gradle.kts")?.let { vf ->
                 try {
-                    flavors.addAll(ReadAction.compute<Set<String>, Throwable> { parseKotlinBuildFile(module, vf) })
+                    flavors.addAll(runReadAction<Set<String>> { parseKotlinBuildFile(module, vf) })
                 } catch (_: Throwable) { }
             }
         }
