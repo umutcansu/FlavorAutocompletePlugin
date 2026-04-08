@@ -16,12 +16,14 @@
     <description><![CDATA[
         <h1>Android Flavor Autocomplete</h1>
         <p>Tired of mistyping product flavor names or switching to your build.gradle file just to remember them? This plugin is for you!</p>
-        <p><b>Android Flavor Autocomplete</b> scans all modules in your project, finds every product flavor you have defined, and provides instant autocompletion suggestions within string literals.</p>
+        <p><b>Android Flavor Autocomplete</b> scans all modules in your project, finds every product flavor you have defined, and provides instant autocompletion suggestions in both Kotlin and Groovy files.</p>
 
         <h2>Key Features:</h2>
         <ul>
             <li><b>Project-Wide Scanning:</b> Finds flavors from all Android modules, not just the one you are currently working in.</li>
-            <li><b>Smart Suggestions:</b> Autocompletion works seamlessly inside string literals in both Kotlin and Groovy files.</li>
+            <li><b>Smart Suggestions:</b> Autocompletion works seamlessly inside string literals and code areas in both Kotlin and Groovy files.</li>
+            <li><b>Multi-API Support:</b> Works across all Android Studio versions from Jellyfish to Narwhal 3 and beyond.</li>
+            <li><b>PSI Fallback:</b> When the Gradle model is unavailable, parses build.gradle and build.gradle.kts files directly, including applied script files.</li>
             <li><b>Time-Saving:</b> Speeds up writing build scripts, tests, and application code that references product flavors.</li>
             <li><b>Error Prevention:</b> Avoids typos and runtime errors caused by incorrect flavor names.</li>
         </ul>
