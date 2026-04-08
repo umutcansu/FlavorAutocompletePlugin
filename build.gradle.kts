@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.umutcansu.flavorautocomplete"
-version = "1.0.5"
+version = "1.0.6"
 
 repositories {
     mavenCentral()
@@ -36,8 +36,11 @@ intellijPlatform {
 
         changeNotes = """
             <ul>
-                <li>Fixed binary compatibility with Android Studio Narwhal and newer.</li>
-                <li>Removed upper version bound for broader IDE compatibility.</li>
+                <li>Fixed flavor detection on Android Studio Narwhal 3 (Platform 253) by adding missing org.jetbrains.android dependency.</li>
+                <li>Added multi-API reflection fallback chain (GradleAndroidModel + AndroidModuleModel) for broad AS version support.</li>
+                <li>Added PSI-based build file parsing as fallback when reflection fails (supports both Groovy and Kotlin DSL).</li>
+                <li>Added support for flavors defined in applied script files (apply from: 'xxx.gradle').</li>
+                <li>Improved cache invalidation: cache now tracks build.gradle/build.gradle.kts file changes.</li>
             </ul>
         """.trimIndent()
     }
