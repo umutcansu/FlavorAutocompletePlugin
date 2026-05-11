@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.umutcansu.flavorautocomplete"
-version = "1.0.11"
+version = "1.0.12"
 
 repositories {
     mavenCentral()
@@ -32,6 +32,7 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "241"
+            untilBuild = "253.*"
         }
 
         changeNotes = """
@@ -44,6 +45,18 @@ intellijPlatform {
             </ul>
         """.trimIndent()
     }
+
+    pluginVerification {
+        ides {
+            select {
+                types.set(listOf(org.jetbrains.intellij.platform.gradle.IntelliJPlatformType.AndroidStudio))
+                channels.set(listOf(org.jetbrains.intellij.platform.gradle.models.ProductRelease.Channel.RELEASE))
+                sinceBuild.set("241")
+                untilBuild.set("252.*")
+            }
+        }
+    }
+
     publishing {
         token.set(providers.gradleProperty("ORG_JETBRAINS_INTELLIJ_PLATFORM_PUBLISH_TOKEN"))
     }
